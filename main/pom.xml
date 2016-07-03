@@ -350,17 +350,6 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.eluder.coveralls</groupId>
-				<artifactId>coveralls-maven-plugin</artifactId>
-				<version>4.0.0</version>
-				<configuration>
-					<jacocoReports>
-						<jacocoReport>jacoco-report/target/site/jacoco-aggregate/jacoco.xml</jacocoReport>
-					</jacocoReports>
-					<repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 

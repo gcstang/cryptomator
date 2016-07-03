@@ -7,12 +7,12 @@ jdk:
 
 env:
   global:
-    - secure: "Lgj042RD0X3rB8VZVZLWP1GetLhjd3PqI5JbJMlzgHJpDI6RkFIBLN9SWAGmkLPCehIp2zA5tu9+UVy0NNMxm9xz6SyjMCaxS28/fnYEXaNmwwDSF6O6gLUbdxyzoYIFPYOPmFxpzhebqnNIsxaM29oZpgRgUGqosCczQxiB+Ng=" #coveralls
     - secure: "IfYURwZaDWuBDvyn47n0k1Zod/IQw1FF+CS5nnV08Q+NfC3vGGJMwV8m59XnbfwnWGxwvCaAbk4qP6s6+ijgZNKkvgfFMo3rfTok5zt43bIqgaFOANYV+OC/1c59gYD6ZUxhW5iNgMgU3qdsRtJuwSmfkVv/jKyLGfAbS4kN8BA=" #coverity
 
-script: mvn -fmain/pom.xml clean test
+script: mvn -fmain/pom.xml -Ptest-coverage clean test jacoco:report-aggregate
 
-after_success: mvn -fmain/pom.xml -Ptest-coverage clean test jacoco:report-aggregate coveralls:report
+after_success:
+- "bash <(curl -s https://codecov.io/bash)"
 
 notifications:
   webhooks:
