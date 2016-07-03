@@ -1,7 +1,6 @@
 package org.cryptomator.filesystem.nio;
 
 import static java.lang.String.format;
-import static java.util.stream.Collectors.toList;
 import static org.cryptomator.common.test.matcher.ContainsMatcher.contains;
 import static org.cryptomator.filesystem.nio.ReflectiveClassMatchers.aClassThatDoesDeclareMethod;
 import static org.cryptomator.filesystem.nio.ReflectiveClassMatchers.aClassThatDoesNotDeclareMethod;
@@ -23,12 +22,14 @@ import java.nio.file.attribute.FileTime;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.cryptomator.common.streams.AutoClosingStream;
 import org.cryptomator.filesystem.File;
 import org.cryptomator.filesystem.FileSystem;
 import org.cryptomator.filesystem.Folder;
+import org.cryptomator.filesystem.Node;
 import org.cryptomator.filesystem.WritableFile;
 import org.junit.Before;
 import org.junit.Rule;
@@ -95,7 +96,7 @@ public class NioFolderTest {
 			when(nioAccess.list(path)).thenReturn(childrenPaths);
 			when(instanceFactory.nioFolder(Optional.of(inTest), childFolderPath, nioAccess)).thenReturn(nioFolderCreatedFromChildFolderPath);
 
-			assertThat(inTest.children().collect(toList()), contains(theInstance(nioFolderCreatedFromChildFolderPath)));
+			assertThat(inTest.children().collect(Collectors.<Node>toList()), contains(theInstance(nioFolderCreatedFromChildFolderPath)));
 		}
 
 		@Test
@@ -107,7 +108,7 @@ public class NioFolderTest {
 			when(nioAccess.list(path)).thenReturn(childrenPaths);
 			when(instanceFactory.nioFile(Optional.of(inTest), childFilePath, nioAccess)).thenReturn(nioFileCreatedFromChildFolderPath);
 
-			assertThat(inTest.children().collect(toList()), contains(theInstance(nioFileCreatedFromChildFolderPath)));
+			assertThat(inTest.children().collect(Collectors.<Node>toList()), contains(theInstance(nioFileCreatedFromChildFolderPath)));
 		}
 
 		@Test
@@ -135,7 +136,7 @@ public class NioFolderTest {
 			when(instanceFactory.nioFile(Optional.of(inTest), anotherChildFilePath, nioAccess)).thenReturn(anotherNioFileCreatedFromChildFilePath);
 			when(instanceFactory.nioFolder(Optional.of(inTest), anotherChildFolderPath, nioAccess)).thenReturn(anotherNioFolderCreatedFromChildFolderPath);
 
-			assertThat(inTest.children().collect(toList()),
+			assertThat(inTest.children().collect(Collectors.<Node>toList()),
 					contains( //
 							theInstance(nioFileCreatedFromChildFilePath), //
 							theInstance(nioFolderCreatedFromChildFolderPath), //

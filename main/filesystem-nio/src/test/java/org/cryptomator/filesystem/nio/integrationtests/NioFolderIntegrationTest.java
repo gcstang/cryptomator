@@ -1,6 +1,5 @@
 package org.cryptomator.filesystem.nio.integrationtests;
 
-import static java.util.stream.Collectors.toList;
 import static org.cryptomator.common.test.matcher.ContainsMatcher.containsInAnyOrder;
 import static org.cryptomator.filesystem.nio.integrationtests.FilesystemSetupUtils.emptyFilesystem;
 import static org.cryptomator.filesystem.nio.integrationtests.FilesystemSetupUtils.file;
@@ -20,9 +19,11 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
+import java.util.stream.Collectors;
 
 import org.cryptomator.filesystem.FileSystem;
 import org.cryptomator.filesystem.Folder;
+import org.cryptomator.filesystem.Node;
 import org.cryptomator.filesystem.nio.NioFileSystem;
 import org.junit.Rule;
 import org.junit.Test;
@@ -88,7 +89,7 @@ public class NioFolderIntegrationTest {
 	public void testChildrenOfEmptyFolder() throws IOException {
 		Folder folder = NioFileSystem.rootedAt(emptyFilesystem());
 
-		assertThat(folder.children().collect(toList()), is(empty()));
+		assertThat(folder.children().collect(Collectors.<Node>toList()), is(empty()));
 	}
 
 	@Test
@@ -128,7 +129,7 @@ public class NioFolderIntegrationTest {
 				file(fileName1), //
 				file(fileName2)));
 
-		assertThat(folder.children().collect(toList()),
+		assertThat(folder.children().collect(Collectors.<Node>toList()),
 				containsInAnyOrder( //
 						folderWithName(folderName1), //
 						folderWithName(folderName2), //
