@@ -127,7 +127,7 @@ public class DelegatingFolderTest {
 		Assert.assertThat(subFiles, Matchers.containsInAnyOrder(delegatingSubFile1));
 
 		/* files and folders */
-		List<Node> children = delegatingFolder.children().collect(Collectors.toList());
+		List<Node> children = delegatingFolder.children().collect(Collectors.<Node>toList());
 		DelegatingNode<?>[] expectedChildren = new DelegatingNode[] {delegatingSubFolder1, delegatingSubFile1};
 		Assert.assertThat(children, Matchers.containsInAnyOrder(expectedChildren));
 
