@@ -9,7 +9,6 @@
 package org.cryptomator.filesystem.shortening;
 
 import static java.lang.String.format;
-import static java.util.stream.Collectors.toList;
 import static org.cryptomator.common.test.matcher.ContainsMatcher.contains;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -19,11 +18,13 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import org.cryptomator.common.test.matcher.PropertyMatcher;
 import org.cryptomator.filesystem.File;
 import org.cryptomator.filesystem.FileSystem;
 import org.cryptomator.filesystem.Folder;
+import org.cryptomator.filesystem.Node;
 import org.cryptomator.filesystem.ReadableFile;
 import org.cryptomator.filesystem.WritableFile;
 import org.cryptomator.filesystem.inmem.InMemoryFileSystem;
@@ -57,7 +58,7 @@ public class ShorteningFileSystemTest {
 		final FileSystem fs = new ShorteningFileSystem(underlyingFs, METADATA_DIR_NAME, THRESHOLD);
 		fs.folder(NAME_LONGER_THAN_THRESHOLD).create();
 
-		assertThat(fs.folders().collect(toList()), contains(folderWithName(NAME_LONGER_THAN_THRESHOLD)));
+		assertThat(fs.folders().collect(Collectors.<Folder>toList()), contains(folderWithName(NAME_LONGER_THAN_THRESHOLD)));
 	}
 
 	@Test
@@ -66,7 +67,7 @@ public class ShorteningFileSystemTest {
 		final FileSystem fs = new ShorteningFileSystem(underlyingFs, METADATA_DIR_NAME, THRESHOLD);
 		fs.folder(NAME_LONGER_THAN_THRESHOLD).create();
 
-		assertThat(fs.children().collect(toList()), contains(folderWithName(NAME_LONGER_THAN_THRESHOLD)));
+		assertThat(fs.children().collect(Collectors.<Node>toList()), contains(folderWithName(NAME_LONGER_THAN_THRESHOLD)));
 	}
 
 	@Test

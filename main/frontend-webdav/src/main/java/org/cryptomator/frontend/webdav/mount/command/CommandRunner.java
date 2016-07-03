@@ -60,7 +60,7 @@ final class CommandRunner {
 	 */
 	static CommandResult execute(Script script, long timeout, TimeUnit unit) throws CommandFailedException {
 		try {
-			final List<String> env = script.environment().entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()).collect(Collectors.toList());
+			final List<String> env = script.environment().entrySet().stream().<String>map(e -> e.getKey() + "=" + e.getValue()).collect(Collectors.toList());
 			CommandResult result = null;
 			for (final String line : script.getLines()) {
 				final String[] cmds = ArrayUtils.add(determineCli(), line);

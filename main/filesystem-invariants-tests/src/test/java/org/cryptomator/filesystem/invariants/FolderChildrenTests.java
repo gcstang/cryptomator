@@ -1,6 +1,5 @@
 package org.cryptomator.filesystem.invariants;
 
-import static java.util.stream.Collectors.toList;
 import static org.cryptomator.common.test.matcher.ContainsMatcher.containsInAnyOrder;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -9,12 +8,14 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeThat;
 
 import java.io.UncheckedIOException;
+import java.util.stream.Collectors;
 
 import org.cryptomator.filesystem.File;
 import org.cryptomator.filesystem.FileSystem;
 import org.cryptomator.filesystem.Folder;
-import org.cryptomator.filesystem.invariants.WaysToObtainAFile.WayToObtainAFile;
+import org.cryptomator.filesystem.Node;
 import org.cryptomator.filesystem.invariants.FileSystemFactories.FileSystemFactory;
+import org.cryptomator.filesystem.invariants.WaysToObtainAFile.WayToObtainAFile;
 import org.cryptomator.filesystem.invariants.WaysToObtainAFolder.WayToObtainAFolder;
 import org.junit.Rule;
 import org.junit.experimental.theories.DataPoints;
@@ -117,7 +118,7 @@ public class FolderChildrenTests {
 		Folder existingFolder = existingFolderFunction.folderWithName(fileSystem, FOLDER_NAME);
 		Folder childFolder = childExistingFolderFunction.folderWithName(existingFolder, childName);
 
-		assertThat(existingFolder.children().collect(toList()), containsInAnyOrder(equalTo(childFolder)));
+		assertThat(existingFolder.children().collect(Collectors.<Node>toList()), containsInAnyOrder(equalTo(childFolder)));
 	}
 
 	@Theory
@@ -132,7 +133,7 @@ public class FolderChildrenTests {
 		Folder childFolder = childExistingFolderFunction.folderWithName(existingFolder, childName);
 		childFolder.delete();
 
-		assertThat(existingFolder.children().collect(toList()), is(empty()));
+		assertThat(existingFolder.children().collect(Collectors.<Node>toList()), is(empty()));
 	}
 
 	@Theory
@@ -146,7 +147,7 @@ public class FolderChildrenTests {
 		Folder existingFolder = existingFolderFunction.folderWithName(fileSystem, FOLDER_NAME);
 		File file = existingFileFunction.fileWithName(existingFolder, childName);
 
-		assertThat(existingFolder.children().collect(toList()), containsInAnyOrder(equalTo(file)));
+		assertThat(existingFolder.children().collect(Collectors.<Node>toList()), containsInAnyOrder(equalTo(file)));
 	}
 
 	@Theory
@@ -161,7 +162,7 @@ public class FolderChildrenTests {
 		File file = existingFileFunction.fileWithName(existingFolder, childName);
 		file.delete();
 
-		assertThat(existingFolder.children().collect(toList()), is(empty()));
+		assertThat(existingFolder.children().collect(Collectors.<Node>toList()), is(empty()));
 	}
 
 	@Theory
@@ -175,8 +176,8 @@ public class FolderChildrenTests {
 		Folder existingFolder = existingFolderFunction.folderWithName(fileSystem, FOLDER_NAME);
 		File file = existingFileFunction.fileWithName(existingFolder, childName);
 
-		assertThat(existingFolder.folders().collect(toList()), is(empty()));
-		assertThat(existingFolder.files().collect(toList()), containsInAnyOrder(equalTo(file)));
+		assertThat(existingFolder.folders().collect(Collectors.<Folder>toList()), is(empty()));
+		assertThat(existingFolder.files().collect(Collectors.<File>toList()), containsInAnyOrder(equalTo(file)));
 	}
 
 	@Theory
@@ -191,8 +192,8 @@ public class FolderChildrenTests {
 		File file = existingFileFunction.fileWithName(existingFolder, childName);
 		file.delete();
 
-		assertThat(existingFolder.folders().collect(toList()), is(empty()));
-		assertThat(existingFolder.files().collect(toList()), is(empty()));
+		assertThat(existingFolder.folders().collect(Collectors.<Folder>toList()), is(empty()));
+		assertThat(existingFolder.files().collect(Collectors.<File>toList()), is(empty()));
 	}
 
 	@Theory
@@ -206,8 +207,8 @@ public class FolderChildrenTests {
 		Folder existingFolder = existingFolderFunction.folderWithName(fileSystem, FOLDER_NAME);
 		Folder childFolder = childExistingFolderFunction.folderWithName(existingFolder, childName);
 
-		assertThat(existingFolder.folders().collect(toList()), containsInAnyOrder(equalTo(childFolder)));
-		assertThat(existingFolder.files().collect(toList()), is(empty()));
+		assertThat(existingFolder.folders().collect(Collectors.<Folder>toList()), containsInAnyOrder(equalTo(childFolder)));
+		assertThat(existingFolder.files().collect(Collectors.<File>toList()), is(empty()));
 	}
 
 	@Theory
@@ -222,8 +223,8 @@ public class FolderChildrenTests {
 		Folder childFolder = childExistingFolderFunction.folderWithName(existingFolder, childName);
 		childFolder.delete();
 
-		assertThat(existingFolder.folders().collect(toList()), is(empty()));
-		assertThat(existingFolder.files().collect(toList()), is(empty()));
+		assertThat(existingFolder.folders().collect(Collectors.<Folder>toList()), is(empty()));
+		assertThat(existingFolder.files().collect(Collectors.<File>toList()), is(empty()));
 	}
 
 }
