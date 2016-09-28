@@ -24,6 +24,7 @@ class WebDavFrontend implements Frontend {
 	private final WebDavMounterProvider webdavMounterProvider;
 	private final ServletContextHandler handler;
 	private final URI uri;
+
 	private WebDavMount mount;
 
 	public WebDavFrontend(WebDavMounterProvider webdavMounterProvider, ServletContextHandler handler, URI uri) throws FrontendCreationFailedException {
@@ -45,13 +46,13 @@ class WebDavFrontend implements Frontend {
 
 	@Override
 	public void mount(Map<MountParam, Optional<String>> mountParams) throws CommandFailedException {
-		mount = webdavMounterProvider.get().mount(uri, mountParams);
+		mount = webdavMounterProvider.chooseMounter(mountParams).mount(uri, mountParams);
 	}
 
-	@Override
-	public void unmount() throws CommandFailedException {
+	private void unmount() throws CommandFailedException {
 		if (mount != null) {
 			mount.unmount();
+			mount = null;
 		}
 	}
 

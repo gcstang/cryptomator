@@ -2,6 +2,7 @@ package org.cryptomator.filesystem.nio;
 
 import java.io.IOException;
 import java.nio.channels.AsynchronousFileChannel;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.CopyOption;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -15,6 +16,11 @@ import java.nio.file.attribute.FileTime;
 import java.util.stream.Stream;
 
 class DefaultNioAccess implements NioAccess {
+
+	@Override
+	public long size(Path path) throws IOException {
+		return Files.size(path);
+	}
 
 	@Override
 	public AsynchronousFileChannel open(Path path, OpenOption... options) throws IOException {
@@ -53,7 +59,18 @@ class DefaultNioAccess implements NioAccess {
 
 	@Override
 	public void delete(Path path) throws IOException {
-		Files.delete(path);
+		try {
+			Files.delete(path);
+		} catch (AccessDeniedException e) {
+			// workaround for https://github.com/cryptomator/cryptomator/issues/317
+			try {
+				if (path.toFile().delete())
+					return;
+			} catch (UnsupportedOperationException e2) {
+				// ignore
+			}
+			throw e;
+		}
 	}
 
 	@Override

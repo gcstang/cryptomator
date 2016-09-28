@@ -79,17 +79,21 @@ final class ConflictResolver {
 	}
 
 	private boolean isSameFileBasedOnSample(File file1, File file2, int sampleSize) {
-		try (ReadableFile r1 = file1.openReadable(); ReadableFile r2 = file2.openReadable()) {
-			if (r1.size() != r2.size()) {
-				return false;
-			} else {
+		if (file1.size() != file2.size()) {
+			return false;
+		} else {
+			try (ReadableFile r1 = file1.openReadable(); ReadableFile r2 = file2.openReadable()) {
 				ByteBuffer beginOfFile1 = ByteBuffer.allocate(sampleSize);
 				ByteBuffer beginOfFile2 = ByteBuffer.allocate(sampleSize);
-				r1.read(beginOfFile1);
-				r2.read(beginOfFile2);
-				beginOfFile1.flip();
-				beginOfFile2.flip();
-				return beginOfFile1.equals(beginOfFile2);
+				int bytesRead1 = r1.read(beginOfFile1);
+				int bytesRead2 = r2.read(beginOfFile2);
+				if (bytesRead1 == bytesRead2) {
+					beginOfFile1.flip();
+					beginOfFile2.flip();
+					return beginOfFile1.equals(beginOfFile2);
+				} else {
+					return false;
+				}
 			}
 		}
 	}

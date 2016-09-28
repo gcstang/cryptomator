@@ -30,12 +30,14 @@ final class LinuxGvfsWebDavMounter implements WebDavMounterStrategy {
 	}
 
 	@Override
-	public boolean shouldWork() {
+	public boolean shouldWork(Map<MountParam, Optional<String>> mountParams) {
 		if (SystemUtils.IS_OS_LINUX) {
+			Optional<String> prefScheme = mountParams.getOrDefault(MountParam.PREFERRED_GVFS_SCHEME, Optional.empty());
+			boolean prefSchemeIsUnspecifiedOrWebDav = !prefScheme.isPresent() || prefScheme.get().equalsIgnoreCase("webdav");
 			final Script checkScripts = Script.fromLines("which gvfs-mount xdg-open");
 			try {
 				checkScripts.execute();
-				return true;
+				return prefSchemeIsUnspecifiedOrWebDav;
 			} catch (CommandFailedException e) {
 				return false;
 			}
@@ -84,15 +86,7 @@ final class LinuxGvfsWebDavMounter implements WebDavMounterStrategy {
 
 		@Override
 		public void reveal() throws CommandFailedException {
-			try {
-				openMountWithWebdavUri("dav:" + webDavUri.getRawSchemeSpecificPart()).execute();
-			} catch (CommandFailedException exception) {
-				openMountWithWebdavUri("webdav:" + webDavUri.getRawSchemeSpecificPart()).execute();
-			}
-		}
-
-		private Script openMountWithWebdavUri(String webdavUri) {
-			return Script.fromLines("set -x", "xdg-open \"$DAV_URI\"").addEnv("DAV_URI", webdavUri);
+			Script.fromLines("set -x", "gvfs-open \"webdav:$DAV_SSP\"").addEnv("DAV_SSP", webDavUri.getRawSchemeSpecificPart()).execute();
 		}
 
 	}

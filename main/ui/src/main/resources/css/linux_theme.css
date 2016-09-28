@@ -305,17 +305,17 @@
  ****************************************************************************/
 
 .check-box {
-	-fx-label-padding: 0 0 0 3;
+	-fx-label-padding: 0 0 0 6px;
 	-fx-text-fill: COLOR_TEXT;
 }
 .check-box > .box {
-	-fx-padding: 3;
+	-fx-padding: 3px;
 	-fx-background-color: COLOR_BORDER_DARK, #FFF;
 	-fx-background-insets: 0, 1;
 }
 .check-box > .box > .mark {
 	-fx-background-color: transparent;
-	-fx-padding: 4;
+	-fx-padding: 4px;
 	-fx-shape: "M-1,4, L-1,5.5 L3.5,8.5 L9,0 L9,-1 L7,-1 L3,6 L1,4 Z";
 }
 .check-box:selected > .box {
@@ -323,6 +323,32 @@
 }
 .check-box:selected > .box > .mark {
 	-fx-background-color: COLOR_TEXT;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * ChoiceBox                                                                   *
+ *                                                                             *
+ ******************************************************************************/
+
+.choice-box {
+	-fx-background-color: COLOR_BORDER_DARK, COLOR_BACKGROUND;
+	-fx-background-insets: 0, 1;
+	-fx-background-radius: 0, 0;
+	-fx-padding: 0.1em 0.6em 0.1em 0.6em;
+	-fx-text-fill: COLOR_TEXT;
+}
+
+.choice-box > .open-button > .arrow {
+	-fx-background-color: transparent, COLOR_TEXT;
+	-fx-background-insets: 0 0 -1 0, 0;
+	-fx-padding: 0.166667em 0.333333em 0.166667em 0.333333em; /* 2 4 2 4 */
+	-fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+
+.choice-box .context-menu {
+	-fx-background-color: COLOR_BORDER, #FFF;
+    -fx-background-insets: 0, 1;
 }
 
 /****************************************************************************
